@@ -35,8 +35,15 @@ gracz = Gracz(
 )
 
 gracz_wspolczynniki = gracz.wspolczynniki
-priti_gracz_wspolczynniki = pprint.pformat(gracz_wspolczynniki, indent=4, width=1)
+kolejnosc_wspolczynnikow = ["Zręczność", "Percepcja", "Charakter", "Spryt", "Budowa"]
 
+posortowany_slownik = {
+    key: gracz_wspolczynniki[key] for key in kolejnosc_wspolczynnikow
+}
+
+priti_gracz_wspolczynniki = pprint.pformat(
+    posortowany_slownik, indent=4, width=1, sort_dicts=False
+)
 
 # PRINTY DO WYCIAGANIA DANYCH:
 print(f"\n***********************************\n")
@@ -44,8 +51,42 @@ print(f"GRACZ:")
 print(f"- klasa: {gracz.klasa_nazwa} - {gracz.klasa_skrot}")
 print(f"- współczynniki: \n{priti_gracz_wspolczynniki}")
 
+
+# Przygotowanie danych statystyk aby wypisane były główne staty w kolejności
+gracz_statystyki = gracz.statystyki_postaci
+
+kolejnosc_statystyki = [
+    "Walka wręcz",
+    "Broń strzelecka",
+    "Broń dystansowa",
+    "Prowadzenie pojazdów",
+    "Zdolności manualne",
+    "Orientacja w terenie",
+    "Spostrzegawczość",
+    "Kamuflaż",
+    "Przetrwanie",
+    "Negocjacje",
+    "Empatia",
+    "Siła woli",
+    "Medycyna",
+    "Technika",
+    "Sprzęt",
+    "Pirotechnika",
+    "Sprawność",
+    "Jeździectwo",
+]
+
+# Tworzymy słownik, który przypisuje numer kolejności do każdej nazwy umiejętności
+kolejnosc_map = {nazwa: index for index, nazwa in enumerate(kolejnosc_statystyki)}
+
+posortowana_lista = sorted(
+    gracz_statystyki,
+    key=lambda pakiet: kolejnosc_map.get(pakiet.nazwa, len(kolejnosc_statystyki)),
+)
+
+
 print("\n- Statystyki postaci:")
-for pakiet in gracz.statystyki_postaci:
+for pakiet in posortowana_lista:
     print(f"--- {pakiet.nazwa} ---")
     print("Umiejętności:")
     for umiejetnosc in pakiet.umiejetnosci:
