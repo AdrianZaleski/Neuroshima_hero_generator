@@ -2,6 +2,17 @@ import pprint
 from gracz import Gracz, SpecjalizacjaKlasa, pakiety
 
 
+def pobierz_wartosc(tekst: str, domyslne: int):
+    try:
+        input_value = input(tekst)
+        if input_value.strip() == "":
+            return domyslne  # Domyślna wartość
+        return int(input_value)
+    except ValueError:
+        print(f"Niepoprawna wartość, ustawiam domyślną: {domyslne}")
+        return domyslne
+
+
 def pokaz_menu():
     for specjal in SpecjalizacjaKlasa:
         print(f"{specjal.value}. {specjal.name}")
@@ -22,10 +33,16 @@ def wybierz_specjal():
 
 # Przykładowe użycie
 input_klasa = wybierz_specjal()
-input_punkty_na_klase = int(input(f"Podaj wartość punktów na klase (domyslne: 30): "))
-input_punkty_na_inne = int(
-    input(f"Podaj wartość punktów na pozostałe skille (domyslne: 35):")
+
+
+input_punkty_na_klase = pobierz_wartosc(
+    tekst="Podaj wartość punktów na klase (domyslne: 30): ", domyslne=30
 )
+
+input_punkty_na_inne = pobierz_wartosc(
+    tekst=f"Podaj wartość punktów na pozostałe skille (domyslne: 35):", domyslne=35
+)
+
 
 gracz = Gracz(
     pakiety=pakiety,
